@@ -1,0 +1,25 @@
+{
+  "name": "natours",
+  "version": "1.0.0",
+  "description": "Learning Node, express and mongodb",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tiwari-Pratik/natours.git"
+  },
+  "author": "Pratik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tiwari-Pratik/natours/issues"
+  },
+  "homepage": "https://github.com/Tiwari-Pratik/natours#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
