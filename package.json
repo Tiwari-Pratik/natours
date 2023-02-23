@@ -4,7 +4,7 @@
   "description": "Learning Node, express and mongodb",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon server.js"
   },
   "repository": {
     "type": "git",
