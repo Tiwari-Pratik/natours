@@ -16,9 +16,9 @@ const router = express.Router();
 //   next();
 // });
 
-router.param("id", checkId);
+// router.param("id", checkId);
 
-router.route("/").get(getAllTours).post(checkBody, addTour);
+router.route("/").get(getAllTours).post(addTour);
 router.route("/:id").get(getTour).patch(updateTour).delete(deleteTour);
 
 module.exports = router;
