@@ -1,4 +1,5 @@
 // const fs = require("fs");
+const APIFeatures = require("../utils/apiFeatures");
 const Tour = require("./../models/tourModel");
 
 // const tours = fs.readFileSync(
@@ -27,25 +28,27 @@ const Tour = require("./../models/tourModel");
 //   }
 //   next();
 // };
+
+exports.aliasTopTours = (req, res, next) => {
+  req.query.limit = "5";
+  req.sort = "-ratingsAverage,price";
+  req.query.fields = "name,price,ratingsAverage,summary,difficulty";
+
+  next();
+};
+
 exports.getAllTours = async (req, res) => {
   // console.log(req.requestTime);
 
   try {
-    const queryObj = { ...req.query };
-    // const excludedFields = ['page','sort','limit','fields'];
-    const {
-      page = "1",
-      sort = "",
-      limit = "0",
-      fields = "",
-      ...finalQueryObj
-    } = queryObj;
-    // console.log(req.query);
-    console.log(finalQueryObj);
+    const features = new APIFeatures(Tour.find(), req.query)
+      .filter()
+      .sorted()
+      .limitedFields()
+      .pagination();
 
-    const query = Tour.find(finalQueryObj);
+    const tours = await features.query;
 
-    const tours = await query;
     res.status(200).json({
       status: "success",
       results: tours.length,
@@ -132,6 +135,44 @@ exports.addTour = async (req, res) => {
     res.status(400).json({
       status: "fail",
       message: "Invalid data sent!",
+    });
+  }
+};
+
+exports.getTourStats = async (req, res) => {
+  try {
+    const stats = await Tour.aggregate([
+      {
+        $match: { ratingsAverage: { $gte: 4.5 } },
+      },
+      {
+        $group: {
+          _id: "$difficulty",
+          numRatings: { $sum: "$ratingsQuantity" },
+          numTours: { $sum: 1 },
+          avgRating: { $avg: "$ratingsAverage" },
+          avgPrice: { $avg: "$price" },
+          minPrice: { $min: "$price" },
+          maxPrice: { $max: "$price" },
+        },
+      },
+      {
+        $sort: {
+          avgPrice: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        stats,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err.message,
     });
   }
 };

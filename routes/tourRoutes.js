@@ -1,5 +1,6 @@
 const express = require("express");
 const {
+  aliasTopTours,
   getAllTours,
   getTour,
   addTour,
@@ -7,6 +8,7 @@ const {
   deleteTour,
   checkId,
   checkBody,
+  getTourStats,
 } = require("../controllers/tourController");
 
 const router = express.Router();
@@ -18,6 +20,8 @@ const router = express.Router();
 
 // router.param("id", checkId);
 
+router.route("/tour-stats").get(getTourStats);
+router.route("/top-5-cheap").get(aliasTopTours, getAllTours);
 router.route("/").get(getAllTours).post(addTour);
 router.route("/:id").get(getTour).patch(updateTour).delete(deleteTour);
 

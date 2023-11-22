@@ -23,7 +23,7 @@ const tourSchema = new mongoose.Schema({
     type: Number,
     default: 4.5,
   },
-  reatingsQunatity: {
+  ratingsQuantity: {
     type: Number,
     default: 0,
   },
@@ -53,6 +53,7 @@ const tourSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now(),
+    select: false,
   },
   startDates: [Date],
 });
